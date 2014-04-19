@@ -7,7 +7,7 @@ namespace :jobs do
       Job.run_jobs
       n += 1
       puts "ran operation #{n} time(s)"
-      sleep 60
+      sleep 1
     end
   end
 
