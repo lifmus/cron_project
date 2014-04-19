@@ -56,7 +56,7 @@ class Job < ActiveRecord::Base
 
   def self.run_jobs_with_interval_of(interval)
     time_period = STRING_TIME_EQUIVALENT[interval]
-    self.where(interval: interval).where("latest_run < ?", DateTime.now - time_period).each{ |j| j.run}   
+    self.where(interval: interval).where("latest_run < ?", DateTime.now + 5.seconds - time_period).each{ |j| j.run}   
   end
 
   def update_latest_run(time)
