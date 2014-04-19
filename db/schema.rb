@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140419150503) do
+ActiveRecord::Schema.define(version: 20140419184929) do
 
   create_table "jobs", force: true do |t|
     t.string   "interval"
@@ -23,6 +23,14 @@ ActiveRecord::Schema.define(version: 20140419150503) do
     t.text     "script"
     t.datetime "latest_run"
     t.boolean  "activated",    default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "outputs", force: true do |t|
+    t.text     "text"
+    t.integer  "job_id"
+    t.boolean  "success"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

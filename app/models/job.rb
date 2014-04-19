@@ -1,5 +1,7 @@
 class Job < ActiveRecord::Base
 
+  has_many :outputs
+
   STRING_TIME_EQUIVALENT = { "minutely" => 1.minute, "15minutely" => 15.minutes, "hourly" => 1.hour, 
                              "daily" => 1.day, "weekly" => 1.week, "monthly" => 1.month }
 
@@ -37,10 +39,10 @@ class Job < ActiveRecord::Base
   end
 
   def run
+    update_latest_run
     puts "*"*50
     puts "Currently running job #{self.id}"
     puts "*"*50
-    update_latest_run
   end
 
   private
@@ -52,7 +54,7 @@ class Job < ActiveRecord::Base
 
   def self.run_jobs_with_interval_of(interval)
     time_period = STRING_TIME_EQUIVALENT[interval]
-    Job.qualifying_jobs.where(interval: interval).where("latest_run < ?", DateTime.now - time_period).each{ |j| j.run}   
+    self.where(interval: interval).where("latest_run < ?", DateTime.now - time_period).each{ |j| j.run}   
   end
 
   def update_latest_run
