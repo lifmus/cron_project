@@ -39,7 +39,9 @@ class Job < ActiveRecord::Base
   end
 
   def run
-    update_latest_run
+    current_time = DateTime.now
+    self.outputs.create(text: "Ran job #{self.id} at minute #{current_time.minute}", created_at: current_time)
+    update_latest_run(current_time)
     puts "*"*50
     puts "Currently running job #{self.id}"
     puts "*"*50
@@ -57,8 +59,8 @@ class Job < ActiveRecord::Base
     self.where(interval: interval).where("latest_run < ?", DateTime.now - time_period).each{ |j| j.run}   
   end
 
-  def update_latest_run
-    self.latest_run = DateTime.now
+  def update_latest_run(time)
+    self.latest_run = time
     self.save
   end
 
