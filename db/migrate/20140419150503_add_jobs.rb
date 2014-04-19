@@ -1,7 +1,7 @@
 class AddJobs < ActiveRecord::Migration
   def change
     create_table :jobs do |t|
-      t.string   :frequency
+      t.string   :interval
       t.integer  :minute
       t.integer  :hour
       t.integer  :day_of_month
@@ -9,6 +9,7 @@ class AddJobs < ActiveRecord::Migration
       t.integer  :day_of_week
       t.text     :script
       t.datetime :latest_run
+      t.boolean  :activated, default: true
 
       t.timestamps
     end

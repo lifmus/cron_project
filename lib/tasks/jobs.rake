@@ -4,10 +4,9 @@ namespace :jobs do
   task start_checker: :environment do
     n = 0
     loop do
-      Job.run_new_jobs
-      ["minutely", "hourly", "daily", "weekly", "monthly"].each{ |f| Job.check_jobs(f)}
+      Job.run_jobs
       n += 1
-      puts "ran operation #{n} time"
+      puts "ran operation #{n} time(s)"
       sleep 60
     end
   end

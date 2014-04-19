@@ -14,7 +14,7 @@
 ActiveRecord::Schema.define(version: 20140419150503) do
 
   create_table "jobs", force: true do |t|
-    t.string   "frequency"
+    t.string   "interval"
     t.integer  "minute"
     t.integer  "hour"
     t.integer  "day_of_month"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20140419150503) do
     t.integer  "day_of_week"
     t.text     "script"
     t.datetime "latest_run"
+    t.boolean  "activated",    default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end

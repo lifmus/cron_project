@@ -1,24 +1,15 @@
 class Job < ActiveRecord::Base
 
-  def self.run_new_jobs
-    Job.where(latest_run: nil).each{ |j| j.run}
+  STRING_TIME_EQUIVALENT = { "minutely" => 1.minute, "15minutely" => 15.minutes, "hourly" => 1.hour, 
+                             "daily" => 1.day, "weekly" => 1.week, "monthly" => 1.month }
+
+  def self.active_jobs
+    self.where(activated: true)
   end
 
-  def self.check_jobs(frequency)
-    case frequency
-    when "minutely" #for test purposes
-      time_period = 1.minute
-    when "hourly"
-      time_period = 1.hour
-    when "daily"
-      time_period = 1.day
-    when "weekly"
-      time_period = 1.week
-    when "monthly"
-      time_period = 1.month
-    end
-
-    Job.where(frequency: frequency).where("latest_run < ?", DateTime.now - time_period).each{ |j| j.run}
+  def self.run_jobs
+    Job.active_jobs.run_new_jobs
+    ["minutely", "15minutely", "hourly", "daily", "weekly", "monthly"].each{ |f| Job.active_jobs.run_jobs_with_interval_of(f)}
   end
 
   def run
@@ -29,6 +20,16 @@ class Job < ActiveRecord::Base
   end
 
   private
+
+  def self.run_new_jobs
+    unrun_jobs = Job.active_jobs.where(latest_run: nil)
+    unrun_jobs.each{ |j| j.run}
+  end
+
+  def self.run_jobs_with_interval_of(interval)
+    time_period = STRING_TIME_EQUIVALENT[interval]
+    Job.active_jobs.where(interval: interval).where("latest_run < ?", DateTime.now - time_period).each{ |j| j.run}   
+  end
 
   def update_latest_run
     self.latest_run = DateTime.now
