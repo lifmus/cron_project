@@ -29,10 +29,11 @@ class JobsController < ApplicationController
     if @job.update_attributes(params[:job].permit(:script, :interval, :minute, :hour, 
                                        :day_of_month, :month, :day_of_week))
       flash[:success] = "Job updated"
+      redirect_to jobs_path
     else
       flash[:error] = @job.errors.empty? ? "Error" : @job.errors.full_messages.to_sentence
+      redirect_to edit_job_path(@job)
     end
-    redirect_to jobs_path
   end
 
   def destroy
