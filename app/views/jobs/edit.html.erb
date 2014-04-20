@@ -1,0 +1,21 @@
+<%= form_for @job do |f| %>
+
+  <h3>Edit Job <%= @job.id %></h3>
+
+  <%= f.label "Code" %>
+  <%= f.text_area :script, placeholder: "Enter ruby code here" %>
+  <%= f.label :interval %>
+  <%= f.select :interval, options_for_select(intervals, @job.interval) %>
+  <%= f.label :hour %>
+  <%= f.select :hour, options_for_select(hours, @job.hour) %>
+  <%= f.label :minute %>
+  <%= f.select :minute, options_for_select(minutes, @job.minute) %>
+  <%= f.label :day_of_month %>
+  <%= f.select :day_of_month, options_for_select(days_of_month, @job.day_of_month) %>
+  <%= f.label :month %>
+  <%= f.select :month, options_for_select(months, @job.month) %>
+  <%= f.label :day_of_week %>
+  <%= f.select :day_of_week, options_for_select(days_of_week, @job.day_of_week) %>
+  <%= f.submit %>
+
+<% end %>

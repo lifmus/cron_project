@@ -45,6 +45,10 @@ class Job < ActiveRecord::Base
     puts "*"*50
   end
 
+  def latest_run_datetime
+    self.latest_run ? self.latest_run.localtime.strftime("%m/%d/%Y %I:%M %p").to_s : "Never"
+  end
+
   private
 
   def self.run_new_jobs

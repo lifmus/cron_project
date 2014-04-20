@@ -1,0 +1,19 @@
+<h1>Job <%= @job.id %></h1>
+
+<p>Latest run: <%= @job.latest_run_datetime %></p>
+
+
+<table>
+  <thead>
+    <td>Output</td>
+    <td>Run on</td>
+  </thead>
+  <tbody>
+    <% @outputs.each do |output| %>
+      <tr>
+        <td><%= output.text %></td>
+        <td><%= output.latest_run_datetime %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
