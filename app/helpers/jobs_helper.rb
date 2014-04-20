@@ -33,10 +33,10 @@ module JobsHelper
     { "minutely" => "minute", "15minutely" => "15 minutes", "hourly" => "hour", 
       "daily" => "day", "weekly" => "week", "monthly" => "month" }
   end
-  
+
   def days_of_week
     [
-      ["",          nil],
+      ["Any",       nil],
       ["Monday",      1],
       ["Tuesday",     2],
       ["Wednesday",   3],
@@ -49,7 +49,7 @@ module JobsHelper
 
   def months
     [
-      ["",         nil],
+      ["Any",      nil],
       ["January",    1],
       ["February",   2],
       ["March",      3],

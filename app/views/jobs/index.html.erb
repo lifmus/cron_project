@@ -6,10 +6,10 @@
   <%= f.text_area :script, placeholder: "Enter ruby code here" %>
   <%= f.label :interval %>
   <%= f.select :interval, options_for_select(intervals) %>
-  <%= f.label :minute %>
-  <%= f.select :minute, options_for_select(minutes) %>
   <%= f.label :hour %>
   <%= f.select :hour, options_for_select(hours) %>
+  <%= f.label :minute %>
+  <%= f.select :minute, options_for_select(minutes) %>
   <%= f.label :day_of_month %>
   <%= f.select :day_of_month, options_for_select(days_of_month) %>
   <%= f.label :month %>
@@ -24,8 +24,8 @@
 
   <p>
     Job <%= job.id%> is scheduled to run every <%= string_view_equivalent[job.interval] %>
-    <%= "at the #{job.minute} minute mark" if job.minute %>
     <%= "at the #{job.hour} hour mark" if job.hour %>
+    <%= "at the #{job.minute} minute mark" if job.minute %>
     <%= "on the #{job.day_of_month.ordinalize} day of the month" if job.day_of_month %>
     <%= "in #{Date::MONTHNAMES[job.month]}" if job.month %>
     <%= "on #{Date::DAYNAMES[job.day_of_week]}s" if job.day_of_week %>
