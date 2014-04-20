@@ -4,6 +4,24 @@
 
   <%= f.label "Code" %>
   <%= f.text_area :script, placeholder: "Enter ruby code here" %>
+  <%= f.label :interval %>
+  <%= f.select :interval, options_for_select(intervals) %>
+  <%= f.label :minute %>
+  <%= f.select :minute, options_for_select(minutes) %>
+  <%= f.label :hour %>
+  <%= f.select :hour, options_for_select(hours) %>
+  <%= f.label :day_of_month %>
+  <%= f.select :day_of_month, options_for_select(days_of_month) %>
+  <%= f.label :month %>
+  <%= f.select :month, options_for_select(months) %>
+  <%= f.label :day_of_week %>
+  <%= f.select :day_of_week, options_for_select(days_of_week) %>
   <%= f.submit %>
+
+<% end %>
+
+<% @jobs.each do |job| %>
+
+  <p>Job <%= job.id%> is scheduled to run every <%= string_view_equivalent[job.interval] %></p>
 
 <% end %>
