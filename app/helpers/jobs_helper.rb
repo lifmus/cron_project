@@ -20,14 +20,6 @@ module JobsHelper
     array_with_nil_and(1..31)
   end
 
-  def months
-    array_with_nil_and(1..12)
-  end
-
-  def days_of_week
-    array_with_nil_and(1..7)
-  end
-
   def array_with_nil_and(range)
     [["Any", nil]] + range.to_a
   end
@@ -41,5 +33,35 @@ module JobsHelper
     { "minutely" => "minute", "15minutely" => "15 minutes", "hourly" => "hour", 
       "daily" => "day", "weekly" => "week", "monthly" => "month" }
   end
+  
+  def days_of_week
+    [
+      ["",          nil],
+      ["Monday",      1],
+      ["Tuesday",     2],
+      ["Wednesday",   3],
+      ["Thursday",    4],
+      ["Friday",      5],
+      ["Saturday",    6],
+      ["Sunday",      7]
+    ]
+  end
 
+  def months
+    [
+      ["",         nil],
+      ["January",    1],
+      ["February",   2],
+      ["March",      3],
+      ["April",      4],
+      ["May",        5],
+      ["June",       6],
+      ["July",       7],
+      ["August",     8], 
+      ["September",  9],
+      ["October",   10],
+      ["November",  11],
+      ["December",  12] 
+    ]
+  end
 end

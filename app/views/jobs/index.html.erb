@@ -29,6 +29,10 @@
     <%= "on the #{job.day_of_month.ordinalize} day of the month" if job.day_of_month %>
     <%= "in #{Date::MONTHNAMES[job.month]}" if job.month %>
     <%= "on #{Date::DAYNAMES[job.day_of_week]}s" if job.day_of_week %>
+    <ul>
+      <li><%= link_to "Details" %> | <%= link_to "Edit" %> | <%= link_to "Delete" %></li>
+      <li>It has run <%= pluralize(job.outputs.size, 'time') %></li>
+    </ul>
   </p>
 
 <% end %>
