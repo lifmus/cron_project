@@ -1,0 +1,9 @@
+<%= form_for Job.new do |f| %>
+
+  <h3>Create a New Job</h3>
+
+  <%= f.label "Code" %>
+  <%= f.text_area :script, placeholder: "Enter ruby code here" %>
+  <%= f.submit %>
+
+<% end %>

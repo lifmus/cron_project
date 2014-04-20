@@ -1,9 +1,7 @@
 class Job < ActiveRecord::Base
+  include JobsHelper
 
-  has_many :outputs
-
-  STRING_TIME_EQUIVALENT = { "minutely" => 1.minute, "15minutely" => 15.minutes, "hourly" => 1.hour, 
-                             "daily" => 1.day, "weekly" => 1.week, "monthly" => 1.month }
+  has_many :outputs                     
 
   def self.qualifying_jobs
     self.is_active.meets_minute_critera.meets_hour_critera.meets_day_of_month_critera.meets_month_critera.meets_day_of_week_critera
@@ -40,7 +38,7 @@ class Job < ActiveRecord::Base
 
   def run
     current_time = DateTime.now
-    self.outputs.create(text: "Ran job #{self.id} at minute #{current_time.minute}", created_at: current_time)
+    self.outputs.create(text: eval(self.script), created_at: current_time)
     update_latest_run(current_time)
     puts "*"*50
     puts "Currently running job #{self.id}"
@@ -55,7 +53,7 @@ class Job < ActiveRecord::Base
   end
 
   def self.run_jobs_with_interval_of(interval)
-    time_period = STRING_TIME_EQUIVALENT[interval]
+    time_period = string_time_equivalent[interval]
     self.where(interval: interval).where("latest_run < ?", DateTime.now + 5.seconds - time_period).each{ |j| j.run}   
   end
 
