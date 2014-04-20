@@ -4,10 +4,11 @@ namespace :jobs do
   task start_checker: :environment do
     n = 0
     loop do
-      if DateTime.now.seconds == 0
+      if DateTime.now.second == 0
         Job.run_jobs
         n += 1
-        puts "ran operation #{n} time(s)"
+        puts "ran operation #{n} times"
+        sleep 1
       end
     end
   end

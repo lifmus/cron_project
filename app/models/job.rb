@@ -1,7 +1,12 @@
 class Job < ActiveRecord::Base
   include JobsHelper
 
-  has_many :outputs                     
+  has_many :outputs 
+
+  validate :script_is_valid
+
+  STRING_TIME_EQUIVALENT = { "minutely" => 1.minute, "15minutely" => 15.minutes, "hourly" => 1.hour, 
+                             "daily" => 1.day, "weekly" => 1.week, "monthly" => 1.month }                    
 
   def self.qualifying_jobs
     self.is_active.meets_minute_critera.meets_hour_critera.meets_day_of_month_critera.meets_month_critera.meets_day_of_week_critera
@@ -38,11 +43,17 @@ class Job < ActiveRecord::Base
 
   def run
     current_time = DateTime.now
-    self.outputs.create(text: eval(self.script), created_at: current_time)
+
+    begin
+      script_output = eval(self.script)
+      self.outputs.create(text: script_output, success: true, created_at: current_time)
+    rescue
+      self.outputs.create(success: false, created_at: current_time)
+    end
+    
     update_latest_run(current_time)
     puts "*"*50
-    puts "Currently running job #{self.id}"
-    puts "*"*50
+    puts "Running job #{self.id}"
   end
 
   def latest_run_datetime
@@ -51,13 +62,21 @@ class Job < ActiveRecord::Base
 
   private
 
+  def script_is_valid
+    begin
+      eval(self.script)
+    rescue
+      errors.add(:script, " is not valid")
+    end
+  end
+
   def self.run_new_jobs
     unrun_jobs = Job.qualifying_jobs.where(latest_run: nil)
     unrun_jobs.each{ |j| j.run}
   end
 
   def self.run_jobs_with_interval_of(interval)
-    time_period = string_time_equivalent[interval]
+    time_period = STRING_TIME_EQUIVALENT[interval]
     self.where(interval: interval).where("latest_run < ?", DateTime.now + 5.seconds - time_period).each{ |j| j.run}   
   end
 

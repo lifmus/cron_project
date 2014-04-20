@@ -24,11 +24,6 @@ module JobsHelper
     [["Any", nil]] + range.to_a
   end
 
-  def string_time_equivalent
-    { "minutely" => 1.minute, "15minutely" => 15.minutes, "hourly" => 1.hour, 
-      "daily" => 1.day, "weekly" => 1.week, "monthly" => 1.month }
-  end
-
   def string_view_equivalent
     { "minutely" => "minute", "15minutely" => "15 minutes", "hourly" => "hour", 
       "daily" => "day", "weekly" => "week", "monthly" => "month" }

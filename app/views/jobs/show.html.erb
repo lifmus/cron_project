@@ -2,17 +2,21 @@
 
 <p>Latest run: <%= @job.latest_run_datetime %></p>
 
+<p>Run <%= pluralize(@outputs.size, "time") %></p>
+
 
 <table>
   <thead>
     <td>Output</td>
     <td>Run on</td>
+    <td>Success</td>
   </thead>
   <tbody>
     <% @outputs.each do |output| %>
       <tr>
         <td><%= output.text %></td>
         <td><%= output.latest_run_datetime %></td>
+        <td><%= output.success %></td>
       </tr>
     <% end %>
   </tbody>
