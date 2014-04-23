@@ -15,4 +15,10 @@ describe Job do
 
     new_job.outputs.last.created_at.to_s.should eq(new_job.latest_run.to_s)
   end
+
+  it "Includes jobs with the right criteria" do
+    new_job = Job.create(interval: "minutely", day_of_week: DateTime.now.wday, day_of_month: DateTime.now.day)
+
+    Job.qualifying_jobs.should == [new_job]
+  end
 end

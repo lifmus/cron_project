@@ -6,34 +6,24 @@ class Job < ActiveRecord::Base
   validate :script_is_valid, on: [:create, :update], :if => :script_changed?
 
   STRING_TIME_EQUIVALENT = { "minutely" => 1.minute, "15minutely" => 15.minutes, "hourly" => 1.hour, 
-                             "daily" => 1.day, "weekly" => 1.week, "monthly" => 1.month }                    
+                             "daily" => 1.day, "weekly" => 1.week, "monthly" => 1.month }
+
+  INTERVAL_METHOD_EQUIVALENT = { "minute" => "minute", "hour" => "hour", "day_of_month" => "day", 
+                                 "month" => "month", "day_of_week" => "wday" }                                  
 
   def self.qualifying_jobs
-    self.is_active.meets_minute_critera.meets_hour_critera.meets_day_of_month_critera.meets_month_critera.meets_day_of_week_critera
+    self.is_active.meets_minute_criteria.meets_hour_criteria.meets_day_of_month_criteria.meets_month_criteria.meets_day_of_week_criteria
   end
 
   def self.is_active
     self.where(activated: true)
   end
 
-  def self.meets_minute_critera
-    self.where('(minute IS NULL) OR (minute = ?)', DateTime.now.minute)
-  end
-
-  def self.meets_hour_critera
-    self.where('(hour IS NULL) OR (hour = ?)', DateTime.now.hour)
-  end
-
-  def self.meets_day_of_month_critera
-    self.where('(day_of_month IS NULL) OR (day_of_month = ?)', DateTime.now.day)
-  end
-
-  def self.meets_month_critera
-    self.where('(month IS NULL) OR (month = ?)', DateTime.now.month)
-  end
-
-  def self.meets_day_of_week_critera
-    self.where('(day_of_week IS NULL) OR (day_of_week = ?)', DateTime.now.wday)
+  INTERVAL_METHOD_EQUIVALENT.keys.each do |interval|
+    define_singleton_method("meets_#{interval}_criteria") do
+      custom_sql_string = '(' + interval +' IS NULL) OR (' + interval  + ' = ' + DateTime.now.send(INTERVAL_METHOD_EQUIVALENT[interval]).to_s + ')'
+      self.where(custom_sql_string)
+    end
   end
 
   def self.run_jobs
