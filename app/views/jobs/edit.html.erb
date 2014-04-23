@@ -4,6 +4,8 @@
 
   <%= f.label "Code" %>
   <%= f.text_area :script, placeholder: "Enter ruby code here" %>
+  <%= f.label "Type" %>
+  <%= f.select :script_type, options_for_select(["Ruby", "Bash"], @job.script_type) %>
   <%= f.label :interval %>
   <%= f.select :interval, options_for_select(intervals, @job.interval) %>
   <%= f.label :hour %>

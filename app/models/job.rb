@@ -3,7 +3,7 @@ class Job < ActiveRecord::Base
 
   has_many :outputs 
 
-  validate :script_is_valid
+  validate :script_is_valid, on: [:create, :update]
 
   STRING_TIME_EQUIVALENT = { "minutely" => 1.minute, "15minutely" => 15.minutes, "hourly" => 1.hour, 
                              "daily" => 1.day, "weekly" => 1.week, "monthly" => 1.month }                    
@@ -45,7 +45,11 @@ class Job < ActiveRecord::Base
     current_time = DateTime.now
 
     begin
-      script_output = eval(self.script)
+      if self.script_type == "Ruby"
+        script_output = eval(self.script)
+      elsif self.script_type == "Bash"
+        script_output = system(self.script)
+      end
       self.outputs.create(text: script_output, success: true, created_at: current_time)
     rescue
       self.outputs.create(success: false, created_at: current_time)
@@ -64,9 +68,13 @@ class Job < ActiveRecord::Base
 
   def script_is_valid
     begin
-      eval(self.script)
+      if self.script_type == "Ruby"
+        eval(self.script)
+      elsif self.script_type == "Bash"
+        system(self.script)
+      end
     rescue
-      errors.add(:script, " is not valid")
+      errors.add(:script, "is not valid")
     end
   end
 

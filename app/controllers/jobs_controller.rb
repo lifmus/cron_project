@@ -5,7 +5,7 @@ class JobsController < ApplicationController
   end
 
   def create
-    @job = Job.new(params[:job].permit(:script, :interval, :minute, :hour, 
+    @job = Job.new(params[:job].permit(:script, :script_type, :interval, :minute, :hour, 
                                        :day_of_month, :month, :day_of_week))
     if @job.save
       flash[:success] = "Job created"
@@ -26,8 +26,8 @@ class JobsController < ApplicationController
 
   def update
     @job = Job.find(params[:id])
-    if @job.update_attributes(params[:job].permit(:script, :interval, :minute, :hour, 
-                                       :day_of_month, :month, :day_of_week))
+    if @job.update_attributes(params[:job].permit(:script, :script_type, :interval, :minute, :hour, 
+                                                  :day_of_month, :month, :day_of_week))
       flash[:success] = "Job updated"
       redirect_to jobs_path
     else
