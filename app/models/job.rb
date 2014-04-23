@@ -3,7 +3,7 @@ class Job < ActiveRecord::Base
 
   has_many :outputs 
 
-  validate :script_is_valid, on: [:create, :update]
+  validate :script_is_valid, on: [:create, :update], :if => :script_changed?
 
   STRING_TIME_EQUIVALENT = { "minutely" => 1.minute, "15minutely" => 15.minutes, "hourly" => 1.hour, 
                              "daily" => 1.day, "weekly" => 1.week, "monthly" => 1.month }                    
