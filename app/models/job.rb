@@ -48,7 +48,7 @@ class Job < ActiveRecord::Base
     rescue
       self.outputs.create(success: false, created_at: current_time)
     end
-    update_latest_run(current_time)
+    self.update_attributes(latest_run: current_time)
   end
 
   def latest_run_datetime
@@ -74,18 +74,12 @@ class Job < ActiveRecord::Base
   end
 
   def self.run_new_jobs
-    unrun_jobs = Job.qualifying_jobs.where(latest_run: nil)
-    unrun_jobs.each{ |j| j.run}
+    Job.qualifying_jobs.where(latest_run: nil).each{ |j| j.run}
   end
 
   def self.run_jobs_with_interval_of(interval)
     time_period = STRING_TIME_EQUIVALENT[interval]
     self.where(interval: interval).where("latest_run < ?", DateTime.now + 5.seconds - time_period).each{ |j| j.run}   
-  end
-
-  def update_latest_run(time)
-    self.latest_run = time
-    self.save
   end
 
 end
