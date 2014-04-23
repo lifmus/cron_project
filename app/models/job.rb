@@ -5,8 +5,8 @@ class Job < ActiveRecord::Base
 
   validate :script_is_valid, on: [:create, :update], :if => :script_changed?
 
-  STRING_TIME_EQUIVALENT = { "minutely" => 1.minute, "15minutely" => 15.minutes, "hourly" => 1.hour, 
-                             "daily" => 1.day, "weekly" => 1.week, "monthly" => 1.month }
+  STRING_TIME_EQUIVALENT     = { "minutely" => 1.minute, "15minutely" => 15.minutes, "hourly" => 1.hour, 
+                                 "daily" => 1.day, "weekly" => 1.week, "monthly" => 1.month }
 
   INTERVAL_METHOD_EQUIVALENT = { "minute" => "minute", "hour" => "hour", "day_of_month" => "day", 
                                  "month" => "month", "day_of_week" => "wday" }                                  
@@ -28,7 +28,7 @@ class Job < ActiveRecord::Base
 
   def self.run_jobs
     Job.qualifying_jobs.run_new_jobs
-    ["minutely", "15minutely", "hourly", "daily", "weekly", "monthly"].each{ |f| Job.qualifying_jobs.run_jobs_with_interval_of(f)}
+    STRING_TIME_EQUIVALENT.keys.each{ |f| Job.qualifying_jobs.run_jobs_with_interval_of(f)}
   end
 
   def run
