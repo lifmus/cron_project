@@ -43,21 +43,12 @@ class Job < ActiveRecord::Base
 
   def run
     current_time = DateTime.now
-
     begin
-      if self.script_type == "Ruby"
-        script_output = eval(self.script)
-      elsif self.script_type == "Bash"
-        script_output = system(self.script)
-      end
-      self.outputs.create(text: script_output, success: true, created_at: current_time)
+      self.outputs.create(text: check_and_evaluate_script_type, success: true, created_at: current_time)
     rescue
       self.outputs.create(success: false, created_at: current_time)
     end
-    
     update_latest_run(current_time)
-    puts "*"*50
-    puts "Running job #{self.id}"
   end
 
   def latest_run_datetime
@@ -68,13 +59,17 @@ class Job < ActiveRecord::Base
 
   def script_is_valid
     begin
-      if self.script_type == "Ruby"
-        eval(self.script)
-      elsif self.script_type == "Bash"
-        system(self.script)
-      end
+      check_and_evaluate_script_type
     rescue
       errors.add(:script, "is not valid")
+    end
+  end
+
+  def check_and_evaluate_script_type
+    if self.script_type == "Ruby"
+      eval(self.script)
+    elsif self.script_type == "Bash"
+      system(self.script)
     end
   end
 
