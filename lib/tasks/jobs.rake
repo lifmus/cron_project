@@ -13,4 +13,13 @@ namespace :jobs do
     end
   end
 
+  desc "Destroy orphaned outputs"
+  task destroy_orphaned_outputs: :environment do
+    outputs = []
+    Output.includes(:job).each do |o|
+      outputs << o if o.job.blank?
+    end
+    outputs.each{ |o| o.destroy }
+  end
+
 end

@@ -1,7 +1,7 @@
 class Job < ActiveRecord::Base
   include JobsHelper
 
-  has_many :outputs 
+  has_many :outputs, dependent: :destroy 
 
   validate :script_is_valid, on: [:create, :update], :if => :script_changed?
 
